@@ -19,9 +19,46 @@ Diogo Gonçalves (eu): como *Analista de dados*, fui responsável por todas as e
 Pessoas interessadas no mercado financeiro brasileiro e entusiastas de dados e visualizações.
 
 🗓️ Recorrência:  
-Toda segunda-feira às 8 horas. 
+Toda segunda-feira às 8 horas.
 
-📗 Descrição:
+📗 Descrição:  
+
+**A) Ingestão de Dados**: processo de coletar dados diretamente das fontes de origem, sem aplicar filtros, para garantir a integridade e a abrangência das informações.
+
+1. Cias Abertas: Documentos: Formulário de Demonstrações Financeiras Padronizadas (DFP) [Link](https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp):  
+Tabelas extraídas das Demonstrações Financeiras (BP, DRE e DFC) no conjundo de dados *dfp_cia_aberta*: dfp_cia_aberta_BPA_con, dfp_cia_aberta_BPP_con, dfp_cia_aberta_DFC_MI_con, dfp_cia_aberta_DRE_con, dfp_cia_aberta_parecer e dfp_cia_aberta
+
+2. Cias Abertas: Documentos: Formulário Cadastral (FCA) [Link](https://dados.cvm.gov.br/dataset/cia_aberta-doc-fca):  
+Tabelas extraídas do cadastro relativo às companhias e auditores no conjundo de dados *fca_cia_aberta*: fca_cia_aberta_endereco, fca_cia_aberta_auditor, fca_cia_aberta_geral
+
+**B) Integração de Dados**: etapa de integrar e combinar múltiplas fontes de dados. Esse processo, que será realizado localmente por meio do Python (os scripts estão postados na pasta), tem a função de armazenar os arquivos em pastas nomeadas como *"base, extracao e empilhado"*, de acordo com o avanço dessa fase. Portanto, em *"base"* temos todos os arquivos zipados da CVM; em *"extração"*, os arquivos .csv extraídos dos zips; e por fim, em *"empilhado"*, arquivos empilhados que selecionamos por assunto (BP, DRE, DFC, parecer, link, endereco, auditor e geral) que iremos subir para o SQL Server.
+
+**C) Transformação de Dados**: para este conjunto de dados da CVM, focaremos no processo de uniformização de formatos e unidades, seleção e filtragem dos dados relevantes. Essas atividades serão realizadas primeiramente no SQL Server e continuamente no Power Query do Power BI.  
+1. SQL Server: na plataforma, seguindo o paradigma de Modelagem Dimensional para organizar as tabelas em dimensões e fatos, será implementado Views para que o Power BI tenha acesso aos dados pertinentes para o projeto. Nesse momento, é preciso destacar apenas as duas fatos; as demais seguem a mesma lógica.
+```sql
+-- vw_DREcons
+SELECT 
+      CAST([DT_REFER] AS DATE) AS [DT_REFER], YEAR([DT_REFER]) AS 'ANO',[ESCALA_MOEDA],[VERSAO],[CNPJ_CIA],[DENOM_CIA],[CD_CONTA],[DS_CONTA], TRY_CAST([VL_CONTA] AS DECIMAL(20, 2)) AS [VL_CONTA]
+FROM [CVM_DADOS].[dbo].[DRE]
+WHERE [ORDEM_EXERC] = 'ÚLTIMO' AND [GRUPO_DFP] = 'DF Consolidado - Demonstração do Resultado'
+```
+```sql
+-- vw_BPcons
+SELECT 
+	CAST([DT_REFER] AS DATE) AS [DT_REFER], YEAR([DT_REFER]) AS 'ANO',[ESCALA_MOEDA], [VERSAO], [CNPJ_CIA], [DENOM_CIA], [CD_CONTA], [DS_CONTA], TRY_CAST([VL_CONTA] AS DECIMAL(20, 2)) AS [VL_CONTA]
+FROM [CVM_DADOS].[dbo].[BPA] AS A
+WHERE [ORDEM_EXERC] = 'ÚLTIMO' AND [GRUPO_DFP] = 'DF Consolidado - Balanço Patrimonial Ativo'
+
+UNION
+
+SELECT 
+	CAST([DT_REFER] AS DATE) AS [DT_REFER], YEAR([DT_REFER]) AS 'ANO', [ESCALA_MOEDA], [VERSAO], [CNPJ_CIA], [DENOM_CIA], [CD_CONTA], [DS_CONTA], TRY_CAST([VL_CONTA] AS DECIMAL(20, 2)) AS [VL_CONTA]
+FROM [CVM_DADOS].[dbo].[BPP] AS P
+WHERE [ORDEM_EXERC] = 'ÚLTIMO' AND [GRUPO_DFP] = 'DF Consolidado - Balanço Patrimonial Passivo'
+```
+2. Power BI: construção das hierarquias para as demonstrações financeiras DRE e BP, tipagem dos campos, agregações e mesclas.
+
+**D) DataViz**: processo de construção de layout, design visual e visualizações adequadas para os dados. Todo o design foi feito no Figma e, para este projeto pessoal, foi interessante seguir os padrões estabelecidos pela [identidade visual](https://www.gov.br/cvm/pt-br/canais_atendimento/imprensa/identidade-visual-manual-da-marca) da CVM, tanto para as cores como para a marca.
 
 ⚙️ Fontes:  
 Formulário de Demonstrações Financeiras Padronizadas (DFP) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/)  
@@ -39,5 +76,13 @@ Valores Mobiliários Negociados e Detidos (VLMO) [(Link)](https://dados.cvm.gov.
 4. Ingestão de Dados com *Python*;
 5. Tratamento de Dados com *T-SQL* no SQL Server e *Power Query (incluindo Query Folding)* no Power BI;
 6. Atualização dos dados com o uso do Gateway e Windows Task Scheduler.
+
+#### Inconsistências e observações:
+1. Delimitador dos arquivos .csv: ";"
+2. O campo [VL_CONTA] quando aberto em excel perde a configuração exata do valor, por isso, é importante abrir os arquivos .csv como texto para explorar as informações corretamente;
+3. O campo [ORDEM_EXERC] das demonstrações financeiras possuem o "ÚLTIMO" e "PENÚLTIMO" exercício da companhia;
+4. O campo [ESCALA_MOEDA] possui registrado os valores de "MIL" e "UNIDADE", levando a crer que há companhias com valores maiores que o esperado em [VL_CONTA];
+5. O campo [DT_REFER] refere-se a informações anuais, logo não é necessário saber a data exata de registro das informações de cada companhia;
+6. Relevante utilizar a codificação "ANSI" para a exibição correta de caracteres em idiomas europeus ocidentais, incluindo acentos. 
 
 ##### Regras de Negócio:
