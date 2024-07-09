@@ -69,9 +69,9 @@ Tabelas extraídas do cadastro relativo às companhias e auditores no conjundo d
 *D) DataViz*: processo de construção de layout, design visual e visualizações adequadas para os dados. Todo o design foi feito no Figma e, para este projeto pessoal, foi interessante seguir os padrões estabelecidos pela [identidade visual](https://www.gov.br/cvm/pt-br/canais_atendimento/imprensa/identidade-visual-manual-da-marca) da CVM, tanto para as cores como para a marca.
 
 #### ⚙️ Fontes:  
-Formulário de Demonstrações Financeiras Padronizadas (DFP) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/)  
-Formulário Cadastral (FCA) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/FCA/DADOS/)  
-Valores Mobiliários Negociados e Detidos (VLMO) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/VLMO/DADOS/)
+1. Formulário de Demonstrações Financeiras Padronizadas (DFP) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/)  
+2. Formulário Cadastral (FCA) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/FCA/DADOS/)  
+3. Valores Mobiliários Negociados e Detidos (VLMO) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/VLMO/DADOS/)
 
 ### Exclusões:
 1. Será excluído do processo de captura de dados do site da CVM os períodos acima de um range de 10 anos;
