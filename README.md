@@ -119,3 +119,5 @@ Endividamento Longo Prazo (ELP) = DIVIDE([Exigível a Longo Prazo], [Passivo]
 Endividamento Curto Prazo (ECP) = DIVIDE([PC], [Passivo])
 Endividamento Líquido (EL) = DIVIDE([Dívida Líquida], [PL])
 ```
+### Considerações Finais
+Estou aberto a dúvidas e sugestões adicionais para garantir que o dashboard atenda plenamente às suas necessidades e expectativas do projeto.
