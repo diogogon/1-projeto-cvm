@@ -68,8 +68,6 @@ Tabelas extraídas do cadastro relativo às companhias e auditores no conjundo d
 
 *D) DataViz*: processo de construção de layout, design visual e visualizações adequadas para os dados. Todo o design foi feito no Figma e, para este projeto pessoal, foi interessante seguir os padrões estabelecidos pela [identidade visual](https://www.gov.br/cvm/pt-br/canais_atendimento/imprensa/identidade-visual-manual-da-marca) da CVM, tanto para as cores como para a marca.
 
-*E) *:
-
 #### ⚙️ Fontes:  
 Formulário de Demonstrações Financeiras Padronizadas (DFP) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/)  
 Formulário Cadastral (FCA) [(Link)](https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/FCA/DADOS/)  
