@@ -19,7 +19,7 @@ Sob um contexto de grande dificuldade de extrair valor dos arquivos disponíveis
 #### 🫂 Público-Alvo:  
 Pessoas interessadas no mercado financeiro brasileiro e entusiastas de dados e visualizações.
 
-#### 🗓️ Recorrência:  
+#### 🗓️ Recorrência de Atualização:  
 Toda segunda-feira às 8 horas.
 
 #### 📗 Descrição:  
